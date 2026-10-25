@@ -25,7 +25,10 @@ A window must appear within 20 seconds; each response call waits at most one
 second. The workflow step has a two-minute outer limit. Finally, cleanup uses
 only the launched process's retained `Popen` handle, never a process-name kill.
 This preview does not launch child processes. Output is captured privately in
-temporary files and reported only as byte counts; no raw application logs,
+temporary files and reported as byte counts plus allowlisted eframe error
+categories from at most the first 4096 stderr bytes. The exact upstream
+`egui_glow requires opengl 2.0+.` error has a fixed classification code; arbitrary
+messages remain unclassified and are never echoed. No raw application logs,
 environment values or desktop captures are published. Compact JSON phase,
 PID, executable SHA-256 and timing receipts go to the job log and step summary.
 There are no added artifacts, caches, storage retention or permission changes.

@@ -164,6 +164,24 @@ class Windows:
         require(self.u.SendMessageTimeoutW(hwnd, 0, 0, 0, 0x23, 1000, ctypes.byref(result)), "message-pump-timeout-or-api-failure-or-window-exit")
 
 
+def classify_stderr(stream):
+    """Publish fixed categories only, never captured text, paths or identifiers."""
+    size = stream.seek(0, 2)
+    stream.seek(0)
+    prefix = stream.read(4096)
+    category = "unclassified" if size else "empty"
+    for name in ("AppCreation", "WinitEventLoop", "Winit", "Glutin", "NoGlutinConfigs", "OpenGL"):
+        if prefix.startswith(("Error: " + name + "(").encode("ascii")):
+            category = name
+            break
+    reason = "unclassified"
+    # Exact static upstream egui_glow 0.37.0 Painter::new error, not a GPU guess.
+    if category == "OpenGL" and b'PainterError("egui_glow requires opengl 2.0+. ")' in prefix:
+        reason = "opengl-version-below-2"
+    return dict(stderr_bytes=size, stderr_category=category, stderr_reason=reason,
+                stderr_prefix_bytes=len(prefix), stderr_prefix_truncated=size > len(prefix))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("exe", type=Path)
@@ -205,7 +223,7 @@ def main():
                         process.wait(timeout=3)
                 emit("owned-process-cleaned", pid=process.pid, exit_before_cleanup=exit_code)
             # Capture byte counts, not unsanitized application strings or environment values.
-            emit("captured-output", stdout_bytes=stdout.seek(0, 2), stderr_bytes=stderr.seek(0, 2))
+            emit("captured-output", stdout_bytes=stdout.seek(0, 2), **classify_stderr(stderr))
             emit("result", passed=status == 0, scope="native-pointer-and-message-pump-only; rendering-and-user-machine-unverified")
             summary = os.environ.get("GITHUB_STEP_SUMMARY")
             if summary:

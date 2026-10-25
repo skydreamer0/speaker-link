@@ -3,6 +3,7 @@ import importlib.util
 from pathlib import Path
 import unittest
 import tempfile
+import io
 from unittest.mock import Mock, patch
 
 SPEC = importlib.util.spec_from_file_location("smoke", Path(__file__).resolve().parents[1] / "tools/windows_input_smoke.py")
@@ -116,6 +117,22 @@ class SmokeTests(unittest.TestCase):
         self.process.kill.assert_called_once_with()
         self.assertEqual(self.process.wait.call_count, 2)
         self.process.wait.assert_called_with(timeout=3)
+
+    def test_stderr_classifies_known_static_error_without_raw_text(self):
+        raw = b'Error: OpenGL(PainterError("egui_glow requires opengl 2.0+. "))\r\n'
+        result = smoke.classify_stderr(io.BytesIO(raw))
+        self.assertEqual(result["stderr_category"], "OpenGL")
+        self.assertEqual(result["stderr_reason"], "opengl-version-below-2")
+        self.assertNotIn("PainterError", str(result))
+
+    def test_stderr_never_exposes_arbitrary_payload(self):
+        for raw in [b"secret-token C:/private/user/file", b'Error: Winit("secret-token")', b'x'*4096 + b'Error: OpenGL(secret-token)']:
+            result = smoke.classify_stderr(io.BytesIO(raw))
+            self.assertNotIn("secret-token", str(result))
+            self.assertNotIn("private", str(result))
+            self.assertLessEqual(result["stderr_prefix_bytes"], 4096)
+        self.assertTrue(result["stderr_prefix_truncated"])
+        self.assertEqual(result["stderr_category"], "unclassified")
 
 
 if __name__ == "__main__":
