@@ -33,7 +33,7 @@ cargo check --offline --locked --workspace --all-targets --features speakerlink-
 cargo test --offline --locked --workspace --features speakerlink-app/native-ui
 ```
 
-A one-time `cargo fetch --locked` is required before offline checks in a fresh environment. Headless egui layout tests cover five preview states at 420×640 and 1000×760, plus pure view-model and reset tests. These tests do not prove native window rendering, OS focus behavior, screen-reader support, Windows runtime operation, or hardware compatibility. Those require separate recorded acceptance. Generic CI runs only synthetic tests and never invokes the App executable.
+A one-time `cargo fetch --locked` is required before offline checks in a fresh environment. Headless egui layout tests cover five preview states at 420×640 and 1000×760, plus pure view-model and reset tests. These tests do not prove native window rendering, OS focus behavior, screen-reader support, Windows runtime operation, or hardware compatibility. Those require separate recorded acceptance. The Windows CI job additionally runs a bounded [native pointer/message-pump smoke](windows-input-smoke.md) against the device-free App executable. This is not render acceptance or proof that the reported local hang is resolved. No hardware operation is part of CI.
 
 ## Dependencies and release boundary
 
