@@ -1,17 +1,17 @@
-# Architecture proposal
+# Architecture
 
-Document version 0.2.0. Design only; dependencies have not been installed or audited for this implementation.
+Document baseline 0.2.0; documentation revised 2026-10-25. The [P0 foundation](FOUNDATION.md) is merged: four unpublished packages, shared contracts, and synthetic tests. The responsibilities and dependencies below describe the target design, not completed features. The current Cargo workspace has no third-party crate dependencies.
 
 ## Rust throughout
 
-| Planned package | Responsibility | Depends on |
+| Package | Planned responsibility | Planned dependencies |
 | --- | --- | --- |
 | speakerlink-core | Domain models, framing/codec, capability policy, command engine, diagnostics redaction | Platform-neutral Rust libraries |
 | speakerlink-windows | Windows discovery, access, RFCOMM sockets and exclusive device ownership | core and Microsoft windows crate |
 | speakerlink-cli | Argument parsing, shared-engine calls, versioned JSON and exit codes | core and Windows adapter |
 | speakerlink-app | Native desktop views, user actions and shared-engine calls | core, Windows adapter and eframe/egui |
 
-One Cargo workspace is proposed. Do not publish placeholder packages to reserve names. Confirm availability before release. Keep transport and protocol separate with a small asynchronous interface driven by actual requirements. Avoid introducing a general multi-vendor plugin system in the first implementation.
+The four packages exist in one Cargo workspace with `publish = false`. The Windows adapter is an `Unsupported` sentinel; CLI and app are library placeholders. Do not publish placeholder packages to reserve names. Confirm availability before release. Keep transport and protocol separate with a small asynchronous interface driven by actual requirements. Avoid introducing a general multi-vendor plugin system in the first implementation.
 
 Windows adapter investigation starts with the windows crate's BluetoothDevice service discovery, uncached refresh where supported, and StreamSocket using each discovered service's host/name. Win32 AF_BTH RFCOMM sockets are an alternative experiment if WinRT access is unsuitable. Select the transport only after a real connection experiment; do not implement both as a permanent fallback without evidence.
 
@@ -21,7 +21,7 @@ btleplug supports BLE, not Bluetooth Classic RFCOMM. It cannot replace an RFCOMM
 
 First establish service discovery and a no-write diagnostic path. Then implement and validate the four library capabilities. The CLI is the first complete consumer and exposes the contract for repeatable testing. Build the app only after that contract works. The app must never implement a second Bluetooth protocol stack or quietly bypass a rejected command.
 
-The initial App uses eframe/egui to stay within Rust. A Windows tray, hotkeys, autostart and installers are separate decisions after the four-feature flow works. No Tauri frontend, web service or account system is required for this scope.
+The proposed initial app would use eframe/egui to stay within Rust; neither is an integrated dependency yet. A Windows tray, hotkeys, autostart and installers are separate decisions after the four-feature flow works. No Tauri frontend, web service or account system is required for this scope.
 
 ## Alternatives and limits
 
