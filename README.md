@@ -4,7 +4,7 @@ Your speaker's battery and connections, from your Windows desktop.
 
 Speaker Link is a planned local Rust toolkit for inspecting and managing supported Bose speakers. It will provide a reusable library, a scriptable CLI, and a native Windows app that share the same device logic.
 
-**Status: specification stage. There is no runnable release, published crate, or verified SoundLink Flex support yet.** Help validate the protocol before we claim compatibility.
+**Status: P0 contract preparation. There is no runnable release, published crate, working Bluetooth adapter, or verified SoundLink Flex support yet.** The [foundation workspace](docs/FOUNDATION.md) contains unpublished contracts and synthetic tests, not device support.
 
 [繁體中文](README.zh-TW.md) · [Specification](docs/SPEC.md) · [Development order](docs/DEVELOPMENT.md) · [Compatibility](docs/COMPATIBILITY.md)
 

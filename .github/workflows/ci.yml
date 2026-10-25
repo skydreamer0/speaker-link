@@ -1,0 +1,41 @@
+name: Foundation contracts
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    name: Contracts (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Record preinstalled toolchain (not a release pin)
+        run: |
+          rustup run stable rustc --version --verbose
+          rustup run stable cargo --version
+          rustup component list --installed --toolchain stable
+      - name: Formatting
+        run: cargo +stable fmt --all -- --check
+      - name: Lint all targets
+        run: cargo +stable clippy --offline --locked --workspace --all-targets -- -D warnings
+      - name: Compile all targets
+        run: cargo +stable check --offline --locked --workspace --all-targets
+      - name: Synthetic contracts only (no hardware tests exist)
+        run: cargo +stable test --offline --locked --workspace
