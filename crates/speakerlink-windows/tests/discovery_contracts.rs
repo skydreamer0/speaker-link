@@ -6,20 +6,13 @@ use speakerlink_windows::{
     NoWriteDiscovery, UnimplementedWindowsDiscovery,
 };
 use std::future::{ready, Future};
-use std::sync::Arc;
-use std::task::{Context, Poll, Wake, Waker};
+use std::task::{Context, Poll, Waker};
 use std::time::Duration;
-
-struct NoopWake;
-impl Wake for NoopWake {
-    fn wake(self: Arc<Self>) {}
-}
 
 // Only immediately-ready synthetic futures are accepted. This is deliberately
 // not a hardware runtime or a polling loop that could hang on device I/O.
 fn ready_result<F: Future>(future: F) -> F::Output {
-    let waker = Waker::from(Arc::new(NoopWake));
-    let mut context = Context::from_waker(&waker);
+    let mut context = Context::from_waker(Waker::noop());
     match Box::pin(future).as_mut().poll(&mut context) {
         Poll::Ready(output) => output,
         Poll::Pending => panic!("synthetic fixture unexpectedly pending"),
