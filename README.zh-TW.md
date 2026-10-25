@@ -13,10 +13,10 @@
 
 ## 從這裡開始
 
-- **安裝 App 或 CLI：**目前尚未提供，請看[可用狀態](docs/QUICKSTART.md#install-the-app-or-cli)。
-- **閱讀原始碼或參與開發：**依照[固定版本教學](docs/QUICKSTART.md#check-the-foundation-from-source)檢查 foundation。
-- **確認自己的音響：**查看[逐功能相容性紀錄](docs/COMPATIBILITY.md)，不能只憑品牌或型號名稱推論支援。
-- **回報問題：**先讀[疑難排解](docs/TROUBLESHOOTING.md)與[貢獻規範](CONTRIBUTING.md)。
+- **安裝 App 或 CLI：** 目前尚未提供，請看[可用狀態](docs/QUICKSTART.md#install-the-app-or-cli)。
+- **閱讀原始碼或參與開發：** 依照[固定版本教學](docs/QUICKSTART.md#check-the-foundation-from-source)檢查 foundation。
+- **確認自己的音響：** 查看[逐功能相容性紀錄](docs/COMPATIBILITY.md)，不能只憑品牌或型號名稱推論支援。
+- **回報問題：** 先讀[疑難排解](docs/TROUBLESHOOTING.md)與[貢獻規範](CONTRIBUTING.md)。
 
 ## 目前能做什麼
 
@@ -60,9 +60,9 @@ Windows API bindings 與 eframe/egui 屬於[架構候選](docs/ARCHITECTURE.md)�
 
 ## 開發順序
 
-- **現在：**foundation 契約與合成 CI 已進 `main`；Windows 與實機驗收仍未完成。
-- **下一步：**真實 Windows 探索與經審查的硬體證據。
-- **之後：**核心四項功能，再依序完成 CLI、App 與發布驗收。
+- **現在：** foundation 契約與合成 CI 已進 `main`；Windows 與實機驗收仍未完成。
+- **下一步：** 真實 Windows 探索與經審查的硬體證據。
+- **之後：** 核心四項功能，再依序完成 CLI、App 與發布驗收。
 
 詳見[開發門檻](docs/DEVELOPMENT.md)、[規格](docs/SPEC.md)、[架構](docs/ARCHITECTURE.md)與[測試計畫](docs/TEST_PLAN.md)。規格內的 CLI 範例仍是提案。
 
