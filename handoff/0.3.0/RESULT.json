@@ -1,0 +1,72 @@
+{
+  "document_version": "0.3.0",
+  "project": "Speaker Link",
+  "issue": 2,
+  "short_code": "WB-0037",
+  "status": "Partial lifecycle evidence; whole Issue2 pending",
+  "source_commit": "5293fe849f857517f9d23e990595c40c48519d14",
+  "source_unchanged": true,
+  "firmware": {
+    "value": "3.0.1",
+    "source": "UserReported",
+    "api_verified": false
+  },
+  "hardware_runs": 1,
+  "max_service_queries": 4,
+  "probes": [
+    {
+      "recovery": {
+        "harness": "Completed",
+        "count": 1,
+        "outcome": "Services"
+      },
+      "stimulus": "ActualOwnerDropped",
+      "first_poll": "Pending",
+      "pending_path_covered": true,
+      "harness": "Completed",
+      "kind": "DropAfterPending",
+      "public_outcome": "NoReadyResult"
+    },
+    {
+      "pending_path_covered": false,
+      "first_poll": "Ready",
+      "harness": "Completed",
+      "recovery": {
+        "harness": "Completed",
+        "count": 1,
+        "outcome": "Services"
+      },
+      "public_outcome": "Error",
+      "observed_timeout": true,
+      "error_code": "Timeout",
+      "stimulus": "NotApplied",
+      "kind": "ShortDeadline",
+      "request_ms": 1
+    }
+  ],
+  "native_cancel": "NotObservable",
+  "native_ack": "NotObservable",
+  "native_close": "NotObservable",
+  "os_cleanup": "NotObservable",
+  "timeout_origin": "NotObservable",
+  "true_denial": "NotRun",
+  "true_unavailable": "NotRun",
+  "host_exit": 0,
+  "wrapper_exit": 0,
+  "host_guard_triggered": false,
+  "settings_commands_sent": false,
+  "connection_state_before_after": "NotObserved",
+  "synthetic_tests": 9,
+  "checks": {
+    "test": 0,
+    "build": 0,
+    "clippy": 0,
+    "check": 0,
+    "fmt": 0
+  },
+  "host_binary_sha256": "79d67d1b118edfae4be4f09c8d4c15367ea21a1d813ec1da6f9125b4749d98bd",
+  "production_cli_app": "NotImplemented",
+  "published": false,
+  "workboard_url": "https://workboard-george.georgehsiao.chatgpt.site/",
+  "next_step": "Integrate frozen correction on remote, rerun exact-head CI, design missing denied/unavailable and cleanup gates"
+}
