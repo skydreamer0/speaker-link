@@ -1,0 +1,9 @@
+/target/
+/.dev-data/
+/work/
+*.pcap
+*.pcapng
+*.btsnoop
+*.log
+.env
+.env.*
