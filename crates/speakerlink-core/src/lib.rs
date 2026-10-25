@@ -3,6 +3,7 @@
 
 pub mod command;
 pub mod diagnostics;
+pub mod discovery;
 pub mod error;
 pub mod model;
 

@@ -33,6 +33,8 @@ jobs:
           rustup component list --installed --toolchain stable
       - name: Formatting
         run: cargo +stable fmt --all -- --check
+      - name: Fetch locked dependencies from crates.io
+        run: cargo +stable fetch --locked
       - name: Lint all targets
         run: cargo +stable clippy --offline --locked --workspace --all-targets -- -D warnings
       - name: Compile all targets

@@ -1,6 +1,6 @@
 # Third-party sources and provenance
 
-The original specification baseline contained project documents and a standard MIT license. The merged foundation adds original Rust contracts; it is not a binary release. No third-party implementation, firmware, binary, logo or packet capture is bundled.
+The original specification baseline contained project documents and a standard MIT license. The merged foundation adds original Rust contracts, and the experimental read-only adapter uses the registry dependencies documented below. This is not a binary release. No third-party implementation source, firmware, binary, logo or packet capture is bundled.
 
 | Reference | Use so far | Adoption rule |
 | --- | --- | --- |
@@ -12,9 +12,17 @@ The original specification baseline contained project documents and a standard M
 
 For every adopted dependency or source fragment, record version/commit, upstream URL, SPDX expression, files used, modifications and notice obligations. A permissive top-level license does not settle every bundled file or transitive dependency. This table is a research inventory, not a completed dependency audit.
 
-## P0 foundation additions
+## P0 read-only adapter dependencies
 
-The Rust packages use only the standard library and this workspace's original MIT code. Cargo.lock contains no third-party package. No Bose implementation, captured packet, GPL translation, Windows crate or UI dependency is imported. Selecting and auditing the Windows/UI dependencies remains gated by the relevant stage.
+The exact 15-package closure, sources, versions, SPDX expressions and upstream Rust minima are in [DEPENDENCIES](docs/DEPENDENCIES.md); Cargo.lock pins registry checksums. All dependencies are unmodified. No third-party Rust source is copied into project modules, and no GPL code is copied, translated or linked. No UI dependency is adopted yet.
+
+- Microsoft windows-rs packages: MIT OR Apache-2.0, MIT option selected. Copyright (c) Microsoft Corporation. Retained [Microsoft MIT notice](licenses/MICROSOFT-MIT.txt), from the upstream repository's license-mit.
+- proc-macro2 1.0.101: MIT OR Apache-2.0, MIT option selected. Retained [upstream notice](licenses/PROC-MACRO2-MIT.txt), unmodified.
+- quote 1.0.40: MIT OR Apache-2.0, MIT option selected. Retained [upstream notice](licenses/QUOTE-MIT.txt), unmodified.
+- syn 2.0.106: MIT OR Apache-2.0, MIT option selected. Retained [upstream notice](licenses/SYN-MIT.txt), unmodified.
+- unicode-ident 1.0.19: (MIT OR Apache-2.0) AND Unicode-3.0. MIT option selected and the additional Unicode license retained: [MIT notice](licenses/UNICODE-IDENT-MIT.txt), [Unicode-3.0 notice](licenses/UNICODE-3.0.txt). The latter includes its Unicode copyright attribution and must not be dropped from distribution.
+
+Notice files preserve upstream text rather than inventing copyright statements absent from those files. The project MIT license does not replace any dependency's obligations. Before distributing compiled artifacts, include these notices and review the actual final dependency closure again.
 
 CI references [actions/checkout](https://github.com/actions/checkout/tree/11d5960a326750d5838078e36cf38b85af677262), pinned to commit `11d5960a326750d5838078e36cf38b85af677262` (v4 tag checked when introduced), under [MIT](https://github.com/actions/checkout/blob/11d5960a326750d5838078e36cf38b85af677262/LICENSE). It is used unmodified as CI tooling; no action source is copied into this distribution. Its upstream copyright and license remain with that tooling. CI uses the runner's preinstalled Rust stable toolchain and records its version; this is not a release toolchain pin or a supported-version declaration.
 
