@@ -2,7 +2,7 @@
 
 在 Windows 桌面查看音響電量與連線，讓腳本和桌面 App 用同一套控制核心。
 
-**目前只有規格與開發追蹤，尚無可執行版本，也還沒證實 SoundLink Flex 的私有控制功能。**
+**目前進入 P0 契約準備，尚無可執行版本、可用藍牙介面或已驗證的 SoundLink Flex 支援。** [基礎 workspace](docs/FOUNDATION.md) 只有未發行的型別、探索介面與合成測試，不代表實機功能已完成。
 
 [English](README.md) · [正式規格](docs/SPEC.md) · [開發順序](docs/DEVELOPMENT.md) · [相容性紀錄](docs/COMPATIBILITY.md)
 
