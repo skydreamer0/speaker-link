@@ -1,3 +1,6 @@
-//! Workspace placeholder only. No application, UI or eframe dependency yet.
-//! P3 depends on accepted P2 CLI contracts.
+//! Device-free presentation of shared core snapshots. No Windows adapter is linked.
 #![forbid(unsafe_code)]
+
+pub mod presentation;
+#[cfg(feature = "native-ui")]
+pub mod ui;

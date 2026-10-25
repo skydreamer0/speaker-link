@@ -11,7 +11,13 @@ Both entries are under `target.'cfg(windows)'.dependencies` in `speakerlink-wind
 
 Microsoft's [published manifest](https://docs.rs/crate/windows/0.62.2/source/Cargo.toml), [published lock](https://docs.rs/crate/windows/0.62.2/source/Cargo.lock) and [published VCS record](https://docs.rs/crate/windows/0.62.2/source/.cargo_vcs_info.json) identify the upstream source commit `32c3144490c016fe496a0aed769bce60987a2e9d` in [microsoft/windows-rs](https://github.com/microsoft/windows-rs/tree/32c3144490c016fe496a0aed769bce60987a2e9d). The windows archive checksum is from its [official registry entry](https://github.com/rust-lang/crates.io-index/blob/master/wi/nd/windows). The remaining versions/checksums follow the published lock. Cargo's locked resolution must still pass for each candidate; a handwritten record alone is not validation.
 
-## Full selected external closure
+## App integration reconciliation (2026-10-25)
+
+The table below preserves the original P0 selection, not the current whole-workspace graph. Integrating the independently reviewed App lock retains all App package versions and checksums and adds the ten Windows packages absent from that lock. The existing Windows direct requirements stay exactly `windows 0.62.2` and `windows-future 0.3.2`; no adapter source changes.
+
+Shared macro dependencies now use the App selection: proc-macro2 1.0.107, quote 1.0.47, syn 2.0.119 (the App graph also contains syn 3.0.9), and unicode-ident 1.0.27. Their cached official-registry MIT texts and unicode-ident's additional Unicode text were compared byte-for-byte with the retained notices and are unchanged. Cargo.lock is the current exact version/checksum authority; [App dependencies](APP_DEPENDENCIES.md) records the separate GUI target-graph and font obligations. This is source integration, not binary distribution or hardware acceptance.
+
+## Historical P0 selected external closure
 
 | Crate | Version | Upstream rust-version | SPDX expression |
 | --- | --- | --- | --- |

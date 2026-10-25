@@ -1,6 +1,8 @@
 # Speaker Link specification
 
-Document version 0.2.0 · 2026-10-25 · Proposed, implementation not started.
+Document version 0.2.0 · 2026-10-25 · Feature contract remains proposed; bounded foundation and device-free App implementation is underway.
+
+Implemented slices include shared contracts, experimental Windows read-only discovery, create-only allowlisted diagnostic saving, and a synthetic App preview. Their source/synthetic checks do not satisfy the F1–F4 hardware, interface-parity or release gates below. See [current development boundaries](DEVELOPMENT.md) and [App preview](APP_PREVIEW.md).
 
 ## Product contract
 

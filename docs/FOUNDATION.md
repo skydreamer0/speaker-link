@@ -1,14 +1,14 @@
 # P0 contracts and experimental Windows adapter
 
-This slice supports [issue #2](https://github.com/skydreamer0/speaker-link/issues/2) without claiming its exit gate. It follows SPEC 0.2.0 at `2782c396f1542f3421565e36ff4d8212c14eacaf`. The specification is unchanged. P1 remains dependent on real P0 evidence; CLI and app implementation remain later stages.
+This slice supports [issue #2](https://github.com/skydreamer0/speaker-link/issues/2) without claiming its exit gate. It follows SPEC 0.2.0 at `2782c396f1542f3421565e36ff4d8212c14eacaf`. The feature acceptance contract is unchanged. P1 remains dependent on real P0 evidence; CLI and real App control integration remain later stages. A separate device-free App preview may be developed ahead of those gates.
 
 ## What exists
 
 - One Cargo workspace with the four proposed packages, each marked `publish = false`. The `0.0.0-dev` version is an unpublished development placeholder, not a product release.
 - `speakerlink-core`: local reference types, independent known/unknown speaker states, optional observation time and explicit freshness, validated battery percentage, capability display states, command input shapes, and SPEC error/exit codes. These are provisional Rust domain types, not a stabilized public API or CLI JSON schema.
 - Platform-neutral discovery contracts live in `speakerlink-core`. `speakerlink-windows` adds a cfg(windows) WinRT service adapter for a caller-selected, already accessible device, explicit cached/uncached policy and bounded operation waiting. No device picker, access request, pairing, socket or speaker-command bytes exist. The original `UnimplementedWindowsDiscovery` still returns `Unsupported`; it does not invoke the new adapter. See [Windows integration limits](WINDOWS_DISCOVERY.md).
-- A device-free diagnostic error preview containing only schema version, development app version and a normalized error code. It accepts no raw error text or identifiers. The immutable byte view is the prospective preview/write boundary, not an implemented file exporter.
-- Synthetic tests and a two-OS, read-only CI workflow. The CLI and app packages are empty library placeholders: no executables, command parser, UI, eframe dependency or device operations exist.
+- A device-free diagnostic error preview containing only schema version, development app version and a normalized error code. It accepts no raw error text or identifiers. The create-only local saver writes those exact immutable preview bytes, refuses existing destinations and reports write/sync failures. It does not supply a CLI/App export workflow or complete F4 acceptance.
+- Synthetic tests and a two-OS, read-only CI workflow. The CLI remains a library placeholder. The App now has an opt-in eframe/egui native entry and shared-snapshot preview with explicitly synthetic states; it has no adapter dependency and all device/export controls are disabled. See [App preview](APP_PREVIEW.md).
 
 Capability states are presentation data, not authorization to write. No reviewed capability profile or write executor exists. Discovery never populates battery or speaker-side topology, even for an uncached result or a familiar name/UUID. Local references are opaque and are not cross-namespace identity evidence. Windows identity, Bluetooth Device ID and Bose protocol identity must not be inferred from each other.
 

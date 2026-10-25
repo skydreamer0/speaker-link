@@ -31,13 +31,13 @@ jobs:
           rustup run stable rustc --version --verbose
           rustup run stable cargo --version
           rustup component list --installed --toolchain stable
+      - name: Fetch pinned registry dependencies
+        run: cargo +stable fetch --locked
       - name: Formatting
         run: cargo +stable fmt --all -- --check
-      - name: Fetch locked dependencies from crates.io
-        run: cargo +stable fetch --locked
       - name: Lint all targets
-        run: cargo +stable clippy --offline --locked --workspace --all-targets -- -D warnings
+        run: cargo +stable clippy --offline --locked --workspace --all-targets --features speakerlink-app/native-ui -- -D warnings
       - name: Compile all targets
-        run: cargo +stable check --offline --locked --workspace --all-targets
+        run: cargo +stable check --offline --locked --workspace --all-targets --features speakerlink-app/native-ui
       - name: Synthetic contracts only (no hardware tests exist)
-        run: cargo +stable test --offline --locked --workspace
+        run: cargo +stable test --offline --locked --workspace --features speakerlink-app/native-ui

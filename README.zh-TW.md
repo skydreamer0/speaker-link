@@ -39,16 +39,16 @@ foundation 已合併至 `main`。本版原始碼另包含實驗性 Windows 唯�
 
 ## 技術與套件
 
-採用 [Rust 2021 workspace](Cargo.toml)，包含四個未發布套件。[Cargo.lock](Cargo.lock) 固定 [15 個 Windows 依賴套件](docs/DEPENDENCIES.md)，尚未選定最低 Rust 或 Windows 版本。
+採用 [Rust 2021 workspace](Cargo.toml)，包含四個未發布套件。[Cargo.lock](Cargo.lock) 固定 [Windows adapter](docs/DEPENDENCIES.md) 與 [App 預覽](docs/APP_DEPENDENCIES.md) 依賴。預覽需要 Rust 1.95 以上，正式 Windows 產品版本仍未驗收。
 
 | 套件 | 目前內容 |
 | --- | --- |
 | [speakerlink-core](crates/speakerlink-core/) | 模型、指令輸入、錯誤與診斷契約；沒有協定 codec 或硬體控制 |
 | [speakerlink-windows](crates/speakerlink-windows/) | 實驗性 WinRT 唯讀服務 adapter 與有界等待；保留明確的 `Unsupported` 佔位實作 |
 | [speakerlink-cli](crates/speakerlink-cli/) | library 佔位套件，沒有可執行命令 |
-| [speakerlink-app](crates/speakerlink-app/) | library 佔位套件，沒有 GUI |
+| [speakerlink-app](crates/speakerlink-app/) | 無裝置原生 UI 預覽；不執行裝置操作 |
 
-Microsoft Windows API bindings 已僅為唯讀 adapter 整合；eframe/egui 仍是[架構候選](docs/ARCHITECTURE.md)，不是已整合的依賴。未來套件、CLI 與 App 將共用能力判斷與控制實作。
+Microsoft Windows API bindings 僅為唯讀 adapter 整合。eframe/egui 0.37.0 已用於[無裝置 App 預覽](docs/APP_PREVIEW.md)，顯示共用 core 快照，不連結 Windows adapter；真實套件／CLI／App 控制一致性仍未驗證。
 
 ## 相容性與限制
 
@@ -60,9 +60,10 @@ Microsoft Windows API bindings 已僅為唯讀 adapter 整合；eframe/egui 仍�
 
 ## 開發順序
 
-- **現在：** foundation 契約、實驗性唯讀服務探索與合成檢查；仍沒有完整 CLI 或 App。
-- **下一步：** 補齊實機、拒絕／不可用與可觀測生命週期驗收，不把重查成功當成 OS 清理證明。
-- **之後：** 核心四項功能，再依序完成 CLI、App 與發布驗收。
+- **現在：** foundation 契約、實驗性唯讀服務探索、僅建立新檔的診斷儲存與合成測試。
+- **平行預覽：** 無裝置 App 入口與共用快照介面，不控制硬體。
+- **下一步：** 補齊硬體、拒絕存取／裝置不可用及可觀測生命週期驗收；重新查詢成功不代表 OS 資源已清理。
+- **之後：** 四項核心能力、CLI／App 一致性與發行驗收。
 
 詳見[開發門檻](docs/DEVELOPMENT.md)、[規格](docs/SPEC.md)、[架構](docs/ARCHITECTURE.md)與[測試計畫](docs/TEST_PLAN.md)。規格內的 CLI 範例仍是提案。
 
@@ -79,3 +80,7 @@ Microsoft Windows API bindings 已僅為唯讀 adapter 整合；eframe/egui 仍�
 原創程式與文件採 [MIT 授權](LICENSE)。第三方材料請見[來源與授權政策](THIRD_PARTY_NOTICES.md)及[散布注意事項](docs/COMPLIANCE.md)。
 
 本專案是獨立社群專案，與 Bose Corporation 或 Bluetooth SIG 沒有隸屬、贊助或背書關係。產品與公司名稱用來辨識相容性研究對象，商標仍屬各自權利人；本專案不宣稱認證、等同官方 App，或能解鎖內建 EQ。
+
+### 無裝置 App 介面預覽
+
+新增 [App 入口與 UI 預覽](docs/APP_PREVIEW.md)：明確標示合成資料，不掃描、不連線或操作喇叭。可切換空狀態、未知、過期、不支援及忙碌畫面；所有裝置／匯出按鈕停用。這不代表 P2/P3 或 F1–F4 已驗收。
