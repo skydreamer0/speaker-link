@@ -1,43 +1,64 @@
 # Speaker Link
 
-Your speaker's battery and connections, from your Windows desktop.
+A local Rust toolkit in development for checking Bose speaker battery and connections from Windows.
 
-Speaker Link is a planned local Rust toolkit for inspecting and managing supported Bose speakers. It will provide a reusable library, a scriptable CLI, and a native Windows app that share the same device logic.
+Speaker Link is being built as one shared engine with three interfaces: a Rust library, a scriptable CLI, and a native Windows app. It is intended for Windows users, developers, and device owners who want to help test compatibility.
 
-**Status: P0 contract preparation. There is no runnable release, published crate, working Bluetooth adapter, or verified SoundLink Flex support yet.** The [foundation workspace](docs/FOUNDATION.md) contains unpublished contracts and synthetic tests, not device support.
+**There is no installable release, published crate, working CLI, or verified speaker-control support yet.** Start with the path below that matches what you want to do.
 
-[繁體中文](README.zh-TW.md) · [Specification](docs/SPEC.md) · [Development order](docs/DEVELOPMENT.md) · [Compatibility](docs/COMPATIBILITY.md)
+[繁體中文](README.zh-TW.md) · [Quick start](docs/QUICKSTART.md) · [Compatibility](docs/COMPATIBILITY.md) · [Troubleshooting](docs/TROUBLESHOOTING.md)
 
-## What we are building
+## Start here
 
-| Feature | Why use it | Release condition |
+| I want to… | Where to go | What is available |
 | --- | --- | --- |
-| Battery status | Check charge without opening a phone app | Actual value verified on the target speaker |
-| Speaker connection list | See the speaker's paired and connected devices separately | Speaker-side protocol verified |
-| Connection control | Connect or disconnect a known device with a clear result | Explicit target and readback verified |
-| Private diagnostics | Export useful troubleshooting evidence locally | Identifier redaction and preview tested |
+| Install a Windows app or CLI | [Availability](docs/QUICKSTART.md#install-the-app-or-cli) | Not available yet; no installer or `cargo install` command |
+| Read or check the Rust foundation | [Source and test tutorial](docs/QUICKSTART.md#check-the-foundation-from-source) | A pinned development snapshot with device-free tests |
+| Check whether my speaker works | [Compatibility and evidence](docs/COMPATIBILITY.md) | Per-feature status; no verified hardware profile yet |
+| Contribute or report a problem | [Contributing](CONTRIBUTING.md) and [troubleshooting](docs/TROUBLESHOOTING.md) | Documentation, code review, and sanitized reports |
 
-The first research target is SoundLink Flex first generation, model 435910. Standard Windows Bluetooth discovery alone does not establish support for speaker-side controls. A PC's paired-device list is not the speaker's paired-device list.
+## Current public status
 
-## Who this is for
+Checked 2026-10-25. A proposal, a passing test, and a released feature are different milestones.
 
-- Windows users who want battery and connection information on the desktop.
-- Developers who want structured results for scripts and integrations.
-- Device owners who can help document model and firmware differences with sanitized reports.
+- [PR #7](https://github.com/skydreamer0/speaker-link/pull/7) was merged into `main` at [`709bffe2`](https://github.com/skydreamer0/speaker-link/commit/709bffe2718fbd07fb1544d83cf3e7d774630a99) on 2026-10-25. The repository now includes unpublished Rust contracts and synthetic tests. Its CLI and app packages remain library placeholders, and its discovery adapter returns `Unsupported` without contacting a device.
+- [`2782c396`](https://github.com/skydreamer0/speaker-link/tree/2782c396f1542f3421565e36ff4d8212c14eacaf) is the historical documentation-only baseline. The source tutorial uses the fixed foundation snapshot [`382294f4`](https://github.com/skydreamer0/speaker-link/tree/382294f407e5b6ef4dd8c3512e0c4f1b2c480b9d), which is now included in `main`.
+- [CI for that exact foundation commit](https://github.com/skydreamer0/speaker-link/actions/runs/40165335679) passed on Ubuntu and Windows. This is evidence for `382294f4`, not a CI claim for the merge commit or later documentation changes. It checks code and synthetic contracts, not Windows Bluetooth access or speaker functionality.
+- Real Windows discovery and hardware acceptance are tracked in [issue #2](https://github.com/skydreamer0/speaker-link/issues/2). The [compatibility table](docs/COMPATIBILITY.md) records what evidence can establish.
 
-The project is local by design. No account, cloud service, or automatic diagnostic upload is planned. You choose whether to share a report.
+The source tutorial deliberately uses that fixed foundation commit, not unreviewed local changes. Merging the foundation does not make it a released application.
 
-## One engine, three interfaces
+## Planned capabilities
 
-Build order: Rust library and Windows adapter, then CLI, then Windows app. All clients will use one capability policy, state model, command implementation, and error model. Unsupported functions will remain unavailable rather than report invented values.
+| Feature | Intended result | Required before claiming support |
+| --- | --- | --- |
+| Battery status | Charge level with source, observation time, and freshness | Comparison with an independent device reading |
+| Speaker connection list | Separate paired, connected, and active-audio states | Verified speaker-side data, not the PC's pairing list |
+| Connection control | Connect or disconnect an explicitly selected known device | Tested capability profile and confirmation by readback |
+| Private diagnostics | Preview and save an allowlisted report locally | Redaction and exact preview/export checks |
 
-The initial scope excludes internal EQ, firmware flashing, arbitrary command injection, physical button remapping, and full Bose app parity. A future capability needs its own evidence and specification.
+The first research target is SoundLink Flex first generation, model 435910. It is a starting sample, not a restriction to one computer, Bluetooth adapter, or firmware version. Each model, firmware, and host combination needs its own evidence. Standard Bluetooth discovery alone does not establish speaker-side control support.
 
-## Try it or contribute
+Missing data must remain unknown. Unknown firmware stays read-only until evaluated; unsupported operations must not send commands. The initial scope excludes internal EQ, firmware flashing, arbitrary command injection, pairing-history deletion, physical button remapping, and full Bose app parity.
 
-There are no installation commands yet. Start with the [SPEC](docs/SPEC.md), review [open issues](https://github.com/skydreamer0/speaker-link/issues), or contribute a sanitized compatibility report using the issue template. Read [CONTRIBUTING](CONTRIBUTING.md) before submitting code and [SECURITY](SECURITY.md) before sharing captures.
+## Design and documentation
 
-Planned CLI examples in the SPEC are design proposals, not working commands. A release will include supported Windows versions, hardware evidence, installation instructions, checksums, and known limitations.
+The library and Windows adapter come first, then the CLI, then the app. They share capability decisions, state, commands, and errors instead of maintaining separate control implementations.
+
+- [Specification](docs/SPEC.md): feature acceptance, privacy, errors, and proposed interfaces.
+- [Architecture](docs/ARCHITECTURE.md): package responsibilities and transport boundaries.
+- [Development order](docs/DEVELOPMENT.md): staged work and exit gates.
+- [Test plan](docs/TEST_PLAN.md): fixture, hardware, and release verification.
+
+The CLI examples in the specification are proposals, not runnable commands. Ubuntu CI does not mean a Linux Bluetooth backend exists.
+
+## Help and contributions
+
+Read [CONTRIBUTING](CONTRIBUTING.md) before changing behavior. Use [GitHub issues](https://github.com/skydreamer0/speaker-link/issues) for questions, documentation gaps, and sanitized bug or compatibility reports. Include the tested commit and what actually passed, failed, or was not tested.
+
+Keep MAC addresses, serials, private device names, local paths, raw captures, and full logs out of public issues. See [troubleshooting](docs/TROUBLESHOOTING.md#report-a-problem-without-sharing-private-data) for a minimal report and [SECURITY](SECURITY.md) for sensitive disclosures.
+
+The project is local by design. No account, cloud service, or automatic diagnostic upload is planned. Sharing a report is your choice.
 
 ## License and independence
 
