@@ -4,7 +4,7 @@ A local Rust toolkit in development for checking Bose speaker battery and connec
 
 [![Foundation contracts on main: view synthetic-check results](https://github.com/skydreamer0/speaker-link/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/skydreamer0/speaker-link/actions/workflows/ci.yml?query=branch%3Amain+event%3Apush)
 [![Read the MIT license for original project code and documentation](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-[![Development stage: foundation only; view milestones and exit gates](https://img.shields.io/badge/stage-foundation%20only-orange)](docs/DEVELOPMENT.md)
+[![Development stage: experimental discovery; view milestones and exit gates](https://img.shields.io/badge/stage-experimental%20discovery-orange)](docs/DEVELOPMENT.md)
 [![Windows research target: view current compatibility limits](https://img.shields.io/badge/research%20target-Windows-lightgrey)](docs/COMPATIBILITY.md)
 
 **No installable release, published crate, working CLI, or verified speaker-control support is available yet.**
@@ -20,12 +20,12 @@ A local Rust toolkit in development for checking Bose speaker battery and connec
 
 ## What exists today
 
-The foundation is merged into `main`: Rust contracts and device-free synthetic tests. It is not yet a working speaker-control engine.
+The foundation is merged into `main`. This source also includes an experimental, read-only Windows service-discovery adapter and device-free synthetic tests. It is not yet a working speaker-control engine or a runnable scanner.
 
 | Area | Current state |
 | --- | --- |
 | Rust foundation | Unpublished domain, error, command-input, and diagnostic-preview contracts |
-| Windows hardware discovery | Not implemented in the public foundation; acceptance remains open in [issue #2](https://github.com/skydreamer0/speaker-link/issues/2) |
+| Windows service discovery | Experimental library adapter for a caller-selected, already permitted device; [hardware and lifecycle acceptance](docs/WINDOWS_DISCOVERY.md#integration-provenance-and-evidence-limits) remains open in [issue #2](https://github.com/skydreamer0/speaker-link/issues/2) |
 | Battery, speaker-side device list, connection control | No reviewed hardware-support profile |
 | Diagnostic export, CLI, Windows app | No complete usable implementation |
 
@@ -39,16 +39,16 @@ Use the [source-and-test tutorial](docs/QUICKSTART.md#check-the-foundation-from-
 
 ## Technology and packages
 
-A [Rust 2021 workspace](Cargo.toml) with four unpublished packages. [Cargo.lock](Cargo.lock) currently contains no third-party crates. No minimum supported Rust or Windows version has been selected.
+A [Rust 2021 workspace](Cargo.toml) with four unpublished packages. [Cargo.lock](Cargo.lock) pins the [15-package Windows dependency closure](docs/DEPENDENCIES.md). No minimum supported Rust or Windows version has been selected.
 
 | Package | What it contains now |
 | --- | --- |
 | [speakerlink-core](crates/speakerlink-core/) | Model, command-input, error, and diagnostic contracts; no protocol codec or hardware control |
-| [speakerlink-windows](crates/speakerlink-windows/) | Discovery contract and an `Unsupported` sentinel; no real Windows adapter |
+| [speakerlink-windows](crates/speakerlink-windows/) | Experimental WinRT read-only service adapter with bounded waiting; explicit `Unsupported` sentinel remains available |
 | [speakerlink-cli](crates/speakerlink-cli/) | Library placeholder; no executable commands |
 | [speakerlink-app](crates/speakerlink-app/) | Library placeholder; no GUI |
 
-Windows API bindings and eframe/egui are [architecture candidates](docs/ARCHITECTURE.md), not integrated dependencies. The future library, CLI, and app will share one capability policy and control implementation.
+Microsoft Windows API bindings are integrated only for the read-only adapter. eframe/egui remains an [architecture candidate](docs/ARCHITECTURE.md), not an integrated dependency. The future library, CLI, and app will share one capability policy and control implementation.
 
 ## Compatibility and limits
 
@@ -60,8 +60,8 @@ The initial scope excludes internal EQ, firmware flashing, arbitrary command inj
 
 ## Development order
 
-- **Now:** foundation contracts and synthetic CI are in `main`; Windows and hardware acceptance remain open.
-- **Next:** real Windows discovery and reviewed hardware evidence.
+- **Now:** foundation contracts, experimental read-only service discovery, and synthetic checks; no complete CLI or app.
+- **Next:** close the remaining hardware, denied/unavailable, and observable lifecycle gates without treating successful requery as proof of OS cleanup.
 - **Later:** the four core capabilities, then CLI, app, and release acceptance.
 
 See the [development gates](docs/DEVELOPMENT.md), [specification](docs/SPEC.md), [architecture](docs/ARCHITECTURE.md), and [test plan](docs/TEST_PLAN.md). The specification's CLI examples remain proposals.

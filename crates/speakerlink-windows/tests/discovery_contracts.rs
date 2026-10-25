@@ -47,6 +47,15 @@ fn requests_default_to_uncached_with_explicit_nonzero_limits() {
         DiscoveryRequest::new(Duration::from_secs(1), 0),
         Err(ErrorCode::InvalidArgument)
     );
+    assert!(DiscoveryRequest::new(Duration::from_secs(60), 256).is_ok());
+    assert_eq!(
+        DiscoveryRequest::new(Duration::from_secs(61), 4),
+        Err(ErrorCode::InvalidArgument)
+    );
+    assert_eq!(
+        DiscoveryRequest::new(Duration::from_secs(1), 257),
+        Err(ErrorCode::InvalidArgument)
+    );
 }
 
 #[test]

@@ -20,6 +20,7 @@ These are evidence labels, not new runtime capability values. [SPEC](SPEC.md) re
 
 | Scope | Public evidence | Bluetooth/product status |
 | --- | --- | --- |
+| Experimental read-only integration in this source | [Fixed handoff and integration limits](WINDOWS_DISCOVERY.md#integration-provenance-and-evidence-limits); each new commit requires its own CI | WinRT library adapter for a host-provided, already permitted device; no runnable scanner or completed hardware acceptance |
 | Foundation introduced by PR #7, `709bffe2` | [PR #7](https://github.com/skydreamer0/speaker-link/pull/7) merged on 2026-10-25; [merge commit](https://github.com/skydreamer0/speaker-link/commit/709bffe2718fbd07fb1544d83cf3e7d774630a99) | Unpublished contracts; CLI/app placeholders; no working Bluetooth adapter |
 | Documentation update merged in `c5baadf5` | [PR #8](https://github.com/skydreamer0/speaker-link/pull/8); [exact-commit main/push CI](https://github.com/skydreamer0/speaker-link/actions/runs/40174021328) passed on Ubuntu 24.04 and Windows Server 2022 | README and guide changes only; no new Bluetooth capability |
 | Historical documentation baseline, `2782c396` | Specification and project documents before the foundation merge | No Cargo workspace or executable at that historical commit |
@@ -28,7 +29,7 @@ These are evidence labels, not new runtime capability values. [SPEC](SPEC.md) re
 | Linux Bluetooth | No backend in the referenced foundation | Ubuntu fixture CI is not Linux device support |
 | macOS and other platforms | No device backend or product validation recorded here | Not part of the initial Windows product scope |
 
-The foundation discovery sentinel returns `Unsupported` on every OS. This describes that implementation, not the inherent capabilities of a particular speaker. No minimum supported Windows or Rust version has been selected.
+The retained foundation discovery sentinel returns `Unsupported` on every OS; it does not invoke the separate experimental Windows adapter. This describes the sentinel implementation, not the inherent capabilities of a particular speaker. No minimum supported Windows or Rust version has been selected. Historical foundation CI and handoff hardware reports do not certify the current integration commit.
 
 ## Speaker feature status
 

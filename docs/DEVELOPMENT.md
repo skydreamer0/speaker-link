@@ -5,7 +5,7 @@ Document baseline 0.2.0; documentation revised 2026-10-25. This is the public de
 | Stage | Work | Exit gate | State |
 | --- | --- | --- | --- |
 | D0 | SPEC, README, license, governance and issue tracking | Reviewed documents and consistent four-feature scope | Documentation baseline merged; maintained as development progresses |
-| P0 | Check local Rust/MSVC/SDK; create workspace; service discovery and redacted diagnostics | Compile on recorded Windows build; real no-write discovery evidence | Foundation workspace and synthetic CI merged; Windows and hardware gates open |
+| P0 | Check local Rust/MSVC/SDK; create workspace; service discovery and redacted diagnostics | Compile on recorded Windows build; real no-write discovery evidence | Foundation merged; experimental read-only adapter integrated in source; hardware and lifecycle gates open |
 | P1 | Core models/codec and Windows adapter; F1, F2, F3, F4 | Shared fixture tests and target hardware evidence; no unsupported writes | Not started |
 | P2 | CLI as first complete core consumer | Stable JSON/exit codes; four functions and failure cases verified | Not started |
 | P3 | Windows app using the same engine | CLI/app parity and cancellation/resource behavior verified | Not started |
@@ -23,4 +23,4 @@ Do not publish a library before its API, license and tested compatibility are re
 6. Check behavior on actual hardware, have someone independently review the same commit, then release. A changed commit invalidates the earlier acceptance until relevant checks are repeated.
 7. Publish capability-specific release notes, checksums and limitations. Do not describe untested models as supported.
 
-The original documentation-only baseline had no builds, tests, package installations or hardware operations. The [P0 foundation](FOUNDATION.md) now supplies an unpublished four-package workspace, synthetic contract tests and a CI definition. It does not supply a working Windows adapter, CLI or app. A passing run is evidence for its exact commit and checks only; see the [source and platform record](COMPATIBILITY.md#source-and-platform-status) for recorded runs. No hardware operation is part of generic CI.
+The original documentation-only baseline had no builds, tests, package installations or hardware operations. The [P0 foundation](FOUNDATION.md) now supplies an unpublished four-package workspace, synthetic contract tests and a CI definition. The experimental Windows service adapter now accepts an already permitted, explicitly selected device, but does not supply a runnable discovery host, CLI or app. See [the integration evidence and remaining gates](WINDOWS_DISCOVERY.md#integration-provenance-and-evidence-limits). A passing run is evidence for its exact commit and checks only; see the [source and platform record](COMPATIBILITY.md#source-and-platform-status) for recorded runs. No hardware operation is part of generic CI.

@@ -4,7 +4,7 @@
 
 [![main 的 Foundation 契約：查看合成檢查結果](https://github.com/skydreamer0/speaker-link/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/skydreamer0/speaker-link/actions/workflows/ci.yml?query=branch%3Amain+event%3Apush)
 [![閱讀原創程式與文件的 MIT 授權](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-[![開發階段：只有 foundation，查看里程碑與驗收門檻](https://img.shields.io/badge/stage-foundation%20only-orange)](docs/DEVELOPMENT.md)
+[![開發階段：實驗性唯讀探索，查看里程碑與驗收門檻](https://img.shields.io/badge/stage-experimental%20discovery-orange)](docs/DEVELOPMENT.md)
 [![Windows 研究目標：查看目前相容性限制](https://img.shields.io/badge/research%20target-Windows-lightgrey)](docs/COMPATIBILITY.md)
 
 **目前沒有可安裝版本、已發布 crate、可用 CLI，或經驗證的音響控制支援。**
@@ -20,12 +20,12 @@
 
 ## 目前能做什麼
 
-foundation 已合併至 `main`，包含 Rust 契約與不需要裝置的合成測試，還不是可用的音響控制核心。
+foundation 已合併至 `main`。本版原始碼另包含實驗性 Windows 唯讀服務探索 adapter 與不需要裝置的合成測試，還不是可用的音響控制核心或可執行掃描工具。
 
 | 項目 | 當前狀態 |
 | --- | --- |
 | Rust foundation | 未發布的資料模型、錯誤、指令輸入與診斷預覽契約 |
-| Windows 實機探索 | 公開 foundation 尚未實作；[issue #2](https://github.com/skydreamer0/speaker-link/issues/2) 的驗收門檻仍開放 |
+| Windows 服務探索 | 實驗性 library adapter，由呼叫端提供已明確選取且獲准存取的裝置；[實機與生命週期驗收](docs/WINDOWS_DISCOVERY.md#integration-provenance-and-evidence-limits)及 [issue #2](https://github.com/skydreamer0/speaker-link/issues/2) 仍未完成 |
 | 電量、音響端裝置清單、連線控制 | 沒有經審查的實機支援 profile |
 | 診斷匯出、CLI、Windows App | 尚未提供完整可用實作 |
 
@@ -39,16 +39,16 @@ foundation 已合併至 `main`，包含 Rust 契約與不需要裝置的合成�
 
 ## 技術與套件
 
-採用 [Rust 2021 workspace](Cargo.toml)，包含四個未發布套件。[Cargo.lock](Cargo.lock) 目前沒有第三方 crate，尚未選定最低 Rust 或 Windows 版本。
+採用 [Rust 2021 workspace](Cargo.toml)，包含四個未發布套件。[Cargo.lock](Cargo.lock) 固定 [15 個 Windows 依賴套件](docs/DEPENDENCIES.md)，尚未選定最低 Rust 或 Windows 版本。
 
 | 套件 | 目前內容 |
 | --- | --- |
 | [speakerlink-core](crates/speakerlink-core/) | 模型、指令輸入、錯誤與診斷契約；沒有協定 codec 或硬體控制 |
-| [speakerlink-windows](crates/speakerlink-windows/) | 探索契約與 `Unsupported` 佔位實作；沒有真實 Windows adapter |
+| [speakerlink-windows](crates/speakerlink-windows/) | 實驗性 WinRT 唯讀服務 adapter 與有界等待；保留明確的 `Unsupported` 佔位實作 |
 | [speakerlink-cli](crates/speakerlink-cli/) | library 佔位套件，沒有可執行命令 |
 | [speakerlink-app](crates/speakerlink-app/) | library 佔位套件，沒有 GUI |
 
-Windows API bindings 與 eframe/egui 屬於[架構候選](docs/ARCHITECTURE.md)，不是已整合的依賴。未來套件、CLI 與 App 將共用能力判斷與控制實作。
+Microsoft Windows API bindings 已僅為唯讀 adapter 整合；eframe/egui 仍是[架構候選](docs/ARCHITECTURE.md)，不是已整合的依賴。未來套件、CLI 與 App 將共用能力判斷與控制實作。
 
 ## 相容性與限制
 
@@ -60,8 +60,8 @@ Windows API bindings 與 eframe/egui 屬於[架構候選](docs/ARCHITECTURE.md)�
 
 ## 開發順序
 
-- **現在：** foundation 契約與合成 CI 已進 `main`；Windows 與實機驗收仍未完成。
-- **下一步：** 真實 Windows 探索與經審查的硬體證據。
+- **現在：** foundation 契約、實驗性唯讀服務探索與合成檢查；仍沒有完整 CLI 或 App。
+- **下一步：** 補齊實機、拒絕／不可用與可觀測生命週期驗收，不把重查成功當成 OS 清理證明。
 - **之後：** 核心四項功能，再依序完成 CLI、App 與發布驗收。
 
 詳見[開發門檻](docs/DEVELOPMENT.md)、[規格](docs/SPEC.md)、[架構](docs/ARCHITECTURE.md)與[測試計畫](docs/TEST_PLAN.md)。規格內的 CLI 範例仍是提案。

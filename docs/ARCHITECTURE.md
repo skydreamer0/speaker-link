@@ -1,6 +1,6 @@
 # Architecture
 
-Document baseline 0.2.0; documentation revised 2026-10-25. The [P0 foundation](FOUNDATION.md) is merged: four unpublished packages, shared contracts, and synthetic tests. The responsibilities and dependencies below describe the target design, not completed features. The current Cargo workspace has no third-party crate dependencies.
+Document baseline 0.2.0; documentation revised 2026-10-25. The [P0 foundation](FOUNDATION.md) is merged: four unpublished packages, shared contracts, and synthetic tests. The responsibilities and dependencies below describe the target design, not completed features. The experimental read-only adapter now uses the [locked Windows dependency closure](DEPENDENCIES.md); no UI or Bose protocol dependency is integrated.
 
 ## Rust throughout
 
@@ -11,9 +11,9 @@ Document baseline 0.2.0; documentation revised 2026-10-25. The [P0 foundation](F
 | speakerlink-cli | Argument parsing, shared-engine calls, versioned JSON and exit codes | core and Windows adapter |
 | speakerlink-app | Native desktop views, user actions and shared-engine calls | core, Windows adapter and eframe/egui |
 
-The four packages exist in one Cargo workspace with `publish = false`. The Windows adapter is an `Unsupported` sentinel; CLI and app are library placeholders. Do not publish placeholder packages to reserve names. Confirm availability before release. Keep transport and protocol separate with a small asynchronous interface driven by actual requirements. Avoid introducing a general multi-vendor plugin system in the first implementation.
+The four packages exist in one Cargo workspace with `publish = false`. The Windows package provides an experimental read-only WinRT service adapter for a caller-selected, already permitted device and retains the explicit `Unsupported` sentinel. CLI and app remain library placeholders. See [adapter boundaries and remaining evidence](WINDOWS_DISCOVERY.md). Do not publish placeholder packages to reserve names. Confirm availability before release. Keep transport and protocol separate with a small asynchronous interface driven by actual requirements. Avoid introducing a general multi-vendor plugin system in the first implementation.
 
-Windows adapter investigation starts with the windows crate's BluetoothDevice service discovery, uncached refresh where supported, and StreamSocket using each discovered service's host/name. Win32 AF_BTH RFCOMM sockets are an alternative experiment if WinRT access is unsuitable. Select the transport only after a real connection experiment; do not implement both as a permanent fallback without evidence.
+The read-only adapter uses the windows crate's BluetoothDevice service discovery and explicit cached/uncached queries. Socket transport remains a later investigation using each discovered service's host/name; no StreamSocket or speaker-command path is implemented. Win32 AF_BTH RFCOMM sockets are an alternative experiment if WinRT access is unsuitable. Select the transport only after a real connection experiment; do not implement both as a permanent fallback without evidence.
 
 btleplug supports BLE, not Bluetooth Classic RFCOMM. It cannot replace an RFCOMM adapter. Linux BlueZ transports cannot be assumed portable to Windows. Reuse of a codec is subject to provenance and tests even when the crate is written in Rust.
 
