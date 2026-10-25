@@ -170,7 +170,7 @@ def classify_stderr(stream):
     stream.seek(0)
     prefix = stream.read(4096)
     category = "unclassified" if size else "empty"
-    for name in ("AppCreation", "WinitEventLoop", "Winit", "Glutin", "NoGlutinConfigs", "OpenGL"):
+    for name in ("AppCreation", "WinitEventLoop", "Winit", "Glutin", "NoGlutinConfigs", "OpenGL", "Wgpu"):
         if prefix.startswith(("Error: " + name + "(").encode("ascii")):
             category = name
             break
@@ -180,6 +180,21 @@ def classify_stderr(stream):
         reason = "opengl-version-below-2"
     return dict(stderr_bytes=size, stderr_category=category, stderr_reason=reason,
                 stderr_prefix_bytes=len(prefix), stderr_prefix_truncated=size > len(prefix))
+
+
+def renderer_receipt(stream):
+    """Only a complete allowlisted startup line; never forward arbitrary stdout."""
+    stream.seek(0)
+    lines = stream.read(4096).splitlines()
+    for backend in ("Vulkan", "Metal", "Dx12", "Gl", "BrowserWebGpu", "Noop"):
+        for device in ("Other", "IntegratedGpu", "DiscreteGpu", "VirtualGpu", "Cpu"):
+            expected = f"speakerlink-renderer=Wgpu backend={backend} device_type={device}".encode("ascii")
+            if expected in lines:
+                return dict(renderer="Wgpu", backend=backend, device_type=device,
+                            software_adapter=device == "Cpu")
+    if b"speakerlink-renderer=Glow" in lines:
+        return dict(renderer="Glow", backend="OpenGL", device_type="unverified")
+    return dict(renderer="unverified", backend="unverified", device_type="unverified")
 
 
 def main():
@@ -223,7 +238,7 @@ def main():
                         process.wait(timeout=3)
                 emit("owned-process-cleaned", pid=process.pid, exit_before_cleanup=exit_code)
             # Capture byte counts, not unsanitized application strings or environment values.
-            emit("captured-output", stdout_bytes=stdout.seek(0, 2), **classify_stderr(stderr))
+            emit("captured-output", stdout_bytes=stdout.seek(0, 2), **renderer_receipt(stdout), **classify_stderr(stderr))
             emit("result", passed=status == 0, scope="native-pointer-and-message-pump-only; rendering-and-user-machine-unverified")
             summary = os.environ.get("GITHUB_STEP_SUMMARY")
             if summary:

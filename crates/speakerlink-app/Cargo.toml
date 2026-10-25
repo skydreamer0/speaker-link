@@ -9,7 +9,7 @@ rust-version = "1.95"
 
 [dependencies]
 speakerlink-core.workspace = true
-eframe = { version = "=0.37.0", default-features = false, features = ["glow", "default_fonts", "x11"], optional = true }
+eframe = { version = "=0.37.0", default-features = false, features = ["wgpu", "glow", "default_fonts", "x11"], optional = true }
 
 [features]
 default = []

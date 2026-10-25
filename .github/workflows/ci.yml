@@ -46,7 +46,7 @@ jobs:
       - name: Build device-free native preview
         if: runner.os == 'Windows'
         run: cargo +stable build --offline --locked -p speakerlink-app --features native-ui
-      - name: Native pointer and message-pump smoke (not render acceptance)
+      - name: Native default WGPU pointer and message-pump smoke (not render acceptance)
         if: runner.os == 'Windows'
         timeout-minutes: 2
         run: python tools/windows_input_smoke.py target/debug/speakerlink-app.exe

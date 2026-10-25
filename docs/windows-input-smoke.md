@@ -1,7 +1,7 @@
 # Hosted Windows native input responsiveness smoke
 
 The existing Windows 2022 contracts job builds the actual `speakerlink-app.exe`
-and launches its default device-free fixture. No device selection, clicks, keys,
+and launches its default device-free fixture with the default WGPU renderer. No device selection, clicks, keys,
 audio APIs, user computer, extra packages, secrets, or paid/GPU runners are used.
 
 The Python standard-library script finds a visible top-level window by the
@@ -31,9 +31,18 @@ categories from at most the first 4096 stderr bytes. The exact upstream
 messages remain unclassified and are never echoed. No raw application logs,
 environment values or desktop captures are published. Compact JSON phase,
 PID, executable SHA-256 and timing receipts go to the job log and step summary.
+The renderer candidate also reports only complete allowlisted startup lines from
+the first 4096 stdout bytes: renderer, backend and device-type enums. A `Cpu`
+adapter is explicitly software, not hardware GPU acceptance. Unknown output stays
+unverified. Upstream adapter selection remains unchanged; no software driver is
+installed or implicit renderer retry performed.
 There are no added artifacts, caches, storage retention or permission changes.
 
 `python -m unittest discover -s tests -p test_windows_input_smoke.py -v` validates
 control-flow failure handling with mocks on any platform. These tests are not
 evidence that Windows input APIs or a real window worked. The actual smoke is
 restricted to the Windows Actions job; do not use it to operate a user's desktop.
+
+The original Glow failures are retained as historical evidence in
+[renderer compatibility](RENDERER_COMPATIBILITY.md); a later WGPU pass does not
+turn those failures into passes.

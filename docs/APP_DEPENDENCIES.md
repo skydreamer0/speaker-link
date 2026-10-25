@@ -6,14 +6,16 @@ Reviewed 2026-10-25 for the source-only, device-free App slice. No binary releas
 
 - `eframe = 0.37.0`, exact pin; upstream tag: <https://github.com/emilk/egui/tree/0.37.0>.
 - `egui` is used through eframe's re-export, not a second direct version.
-- eframe defaults are disabled. Only `glow`, `default_fonts`, and `x11` are selected behind the App's optional `native-ui` feature.
+- eframe defaults are disabled. Only `wgpu`, `glow`, `default_fonts`, and `x11` are selected behind the App's optional `native-ui` feature.
 - Upstream declares Rust 1.95 minimum; the App package records this minimum. The development toolchain used for this candidate is Rust 1.99.1, not evidence of a separately tested 1.95 build.
 - App source remains Rust edition 2021; the workspace uses resolver 2. Dependencies may use edition 2024.
 - `speakerlink-windows` is removed from the App dependency list. UI code cannot reach the Bluetooth adapter through its dependency graph.
 
-The exact resolved versions and registry checksums are pinned in Cargo.lock. Review used offline `cargo tree --locked --edges normal,build` for `x86_64-pc-windows-msvc` and `x86_64-unknown-linux-gnu`, intersected with metadata. There are 96 third-party packages in the Windows graph and 112 in the Linux graph. Counts describe resolved normal/build graphs, not successful compilation or final binary linkage. The lockfile also contains optional/all-platform packages that are not in these graphs.
+The original Glow-only review below is historical; the renderer compatibility candidate additionally enables WGPU. See the additive inventory in [renderer compatibility](RENDERER_COMPATIBILITY.md).
 
-No selected target graph contains wgpu, egui-wgpu, arboard, webbrowser, egui_inspection, egui_system_font_provider or accesskit_winit. Clipboard, browser-link actions, persistence, system-font discovery and inspection/TCP features are not enabled. This selection also omits the native screen-reader bridge; no accessibility acceptance is claimed.
+The exact resolved versions and registry checksums are pinned in Cargo.lock. Review used offline `cargo tree --locked --edges normal,build` for `x86_64-pc-windows-msvc` and `x86_64-unknown-linux-gnu`, intersected with metadata. The original Glow-only graph had 96 third-party packages in the Windows graph and 112 in the Linux graph. Counts describe resolved normal/build graphs, not successful compilation or final binary linkage. The lockfile also contains optional/all-platform packages that are not in these graphs.
+
+The original Glow-only target graphs did not contain wgpu or egui-wgpu. The compatibility candidate now includes both. Neither selection enables arboard, webbrowser, egui_inspection, egui_system_font_provider or accesskit_winit. Clipboard, browser-link actions, persistence, system-font discovery and inspection/TCP features are not enabled. This selection also omits the native screen-reader bridge; no accessibility acceptance is claimed.
 
 ## License findings
 

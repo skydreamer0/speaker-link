@@ -37,6 +37,14 @@ A one-time `cargo fetch --locked` is required before offline checks in a fresh e
 
 ## Dependencies and release boundary
 
-`eframe` is pinned to 0.37.0 (minimum Rust 1.95) with defaults disabled; selected features are `glow`, `default_fonts`, and `x11`. Clipboard, URL-opening links, persistence, system-font discovery, inspection/TCP, wgpu and accesskit are not enabled. The native GUI is behind `native-ui`, so default library tests need no windowing runtime. Cargo.lock pins registry versions and checksums.
+`eframe` is pinned to 0.37.0 (minimum Rust 1.95) with defaults disabled; selected features are `wgpu`, `glow`, `default_fonts`, and `x11`. Clipboard, URL-opening links, persistence, system-font discovery, inspection/TCP and accesskit are not enabled. The native GUI is behind `native-ui`, so default library tests need no windowing runtime. Cargo.lock pins registry versions and checksums.
 
 See [APP_DEPENDENCIES](APP_DEPENDENCIES.md) for exact dependency-license review and distribution obligations. This source slice is not a binary release; dependency-license declarations alone are not a release packaging audit.
+
+## Renderer compatibility candidate
+
+The native entry now defaults to the version-matched eframe WGPU renderer.
+`cargo run --locked -p speakerlink-app --features native-ui -- --renderer glow`
+explicitly selects the original Glow path for comparison; startup failures do not
+silently fall back to another renderer. See [evidence and limits](RENDERER_COMPATIBILITY.md).
+This is not confirmation that the reported local hover hang is fixed.

@@ -134,6 +134,15 @@ class SmokeTests(unittest.TestCase):
         self.assertTrue(result["stderr_prefix_truncated"])
         self.assertEqual(result["stderr_category"], "unclassified")
 
+    def test_renderer_receipt_distinguishes_software_without_echoing_strings(self):
+        result = smoke.renderer_receipt(io.BytesIO(b"speakerlink-renderer=Wgpu backend=Dx12 device_type=Cpu\n"))
+        self.assertEqual(result["backend"], "Dx12")
+        self.assertTrue(result["software_adapter"])
+        for raw in (b"secret private-driver-name", b"speakerlink-renderer=Wgpu backend=secret device_type=Cpu", b"x"*4096 + b"speakerlink-renderer=Glow"):
+            result = smoke.renderer_receipt(io.BytesIO(raw))
+            self.assertEqual(result["renderer"], "unverified")
+            self.assertNotIn("secret", str(result))
+
 
 if __name__ == "__main__":
     unittest.main()
