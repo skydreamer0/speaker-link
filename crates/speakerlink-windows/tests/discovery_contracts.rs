@@ -2,8 +2,8 @@
 use speakerlink_core::model::{Capabilities, DeviceRef, Freshness, Observation, UnknownReason};
 use speakerlink_core::{ErrorCode, Result};
 use speakerlink_windows::{
-    AccessStatus, CacheMode, DiscoveredService, DiscoveryOutcome, DiscoveryRequest, NoWriteDiscovery,
-    UnimplementedWindowsDiscovery,
+    AccessStatus, CacheMode, DiscoveredService, DiscoveryOutcome, DiscoveryRequest,
+    NoWriteDiscovery, UnimplementedWindowsDiscovery,
 };
 use std::future::{ready, Future};
 use std::sync::Arc;
