@@ -2,66 +2,80 @@
 
 A local Rust toolkit in development for checking Bose speaker battery and connections from Windows.
 
-Speaker Link is being built as one shared engine with three interfaces: a Rust library, a scriptable CLI, and a native Windows app. It is intended for Windows users, developers, and device owners who want to help test compatibility.
+[![Foundation contracts on main: view synthetic-check results](https://github.com/skydreamer0/speaker-link/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/skydreamer0/speaker-link/actions/workflows/ci.yml?query=branch%3Amain+event%3Apush)
+[![Read the MIT license for original project code and documentation](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![Development stage: foundation only; view milestones and exit gates](https://img.shields.io/badge/stage-foundation%20only-orange)](docs/DEVELOPMENT.md)
+[![Windows research target: view current compatibility limits](https://img.shields.io/badge/research%20target-Windows-lightgrey)](docs/COMPATIBILITY.md)
 
-**There is no installable release, published crate, working CLI, or verified speaker-control support yet.** Start with the path below that matches what you want to do.
+**No installable release, published crate, working CLI, or verified speaker-control support is available yet.**
 
 [繁體中文](README.zh-TW.md) · [Quick start](docs/QUICKSTART.md) · [Compatibility](docs/COMPATIBILITY.md) · [Troubleshooting](docs/TROUBLESHOOTING.md)
 
 ## Start here
 
-| I want to… | Where to go | What is available |
-| --- | --- | --- |
-| Install a Windows app or CLI | [Availability](docs/QUICKSTART.md#install-the-app-or-cli) | Not available yet; no installer or `cargo install` command |
-| Read or check the Rust foundation | [Source and test tutorial](docs/QUICKSTART.md#check-the-foundation-from-source) | A pinned development snapshot with device-free tests |
-| Check whether my speaker works | [Compatibility and evidence](docs/COMPATIBILITY.md) | Per-feature status; no verified hardware profile yet |
-| Contribute or report a problem | [Contributing](CONTRIBUTING.md) and [troubleshooting](docs/TROUBLESHOOTING.md) | Documentation, code review, and sanitized reports |
+- **Install the app or CLI:** neither is available yet. See [availability](docs/QUICKSTART.md#install-the-app-or-cli).
+- **Read source or contribute:** follow the [pinned foundation tutorial](docs/QUICKSTART.md#check-the-foundation-from-source).
+- **Check your speaker:** read the [per-feature compatibility record](docs/COMPATIBILITY.md); a brand or model name alone does not establish support.
+- **Report a problem:** start with [troubleshooting](docs/TROUBLESHOOTING.md) and [contributing](CONTRIBUTING.md).
 
-## Current public status
+## What exists today
 
-Checked 2026-10-25. A proposal, a passing test, and a released feature are different milestones.
+The foundation is merged into `main`: Rust contracts and device-free synthetic tests. It is not yet a working speaker-control engine.
 
-- [PR #7](https://github.com/skydreamer0/speaker-link/pull/7) was merged into `main` at [`709bffe2`](https://github.com/skydreamer0/speaker-link/commit/709bffe2718fbd07fb1544d83cf3e7d774630a99) on 2026-10-25. The repository now includes unpublished Rust contracts and synthetic tests. Its CLI and app packages remain library placeholders, and its discovery adapter returns `Unsupported` without contacting a device.
-- [`2782c396`](https://github.com/skydreamer0/speaker-link/tree/2782c396f1542f3421565e36ff4d8212c14eacaf) is the historical documentation-only baseline. The source tutorial uses the fixed foundation snapshot [`382294f4`](https://github.com/skydreamer0/speaker-link/tree/382294f407e5b6ef4dd8c3512e0c4f1b2c480b9d), which is now included in `main`.
-- [CI for that exact foundation commit](https://github.com/skydreamer0/speaker-link/actions/runs/40165335679) passed on Ubuntu and Windows. This is evidence for `382294f4`, not a CI claim for the merge commit or later documentation changes. It checks code and synthetic contracts, not Windows Bluetooth access or speaker functionality.
-- Real Windows discovery and hardware acceptance are tracked in [issue #2](https://github.com/skydreamer0/speaker-link/issues/2). The [compatibility table](docs/COMPATIBILITY.md) records what evidence can establish.
+| Area | Current state |
+| --- | --- |
+| Rust foundation | Unpublished domain, error, command-input, and diagnostic-preview contracts |
+| Windows hardware discovery | Not implemented in the public foundation; acceptance remains open in [issue #2](https://github.com/skydreamer0/speaker-link/issues/2) |
+| Battery, speaker-side device list, connection control | No reviewed hardware-support profile |
+| Diagnostic export, CLI, Windows app | No complete usable implementation |
 
-The source tutorial deliberately uses that fixed foundation commit, not unreviewed local changes. Merging the foundation does not make it a released application.
+The [Foundation CI badge](https://github.com/skydreamer0/speaker-link/actions/workflows/ci.yml?query=branch%3Amain+event%3Apush) tracks `main` push runs. It covers code and synthetic contracts, not Windows Bluetooth access or speaker functionality. Ubuntu CI is not Linux Bluetooth support. [Exact-commit evidence and history](docs/COMPATIBILITY.md#source-and-platform-status) remain separate from this changing badge.
 
-## Planned capabilities
+## Quick start: check the foundation
 
-| Feature | Intended result | Required before claiming support |
-| --- | --- | --- |
-| Battery status | Charge level with source, observation time, and freshness | Comparison with an independent device reading |
-| Speaker connection list | Separate paired, connected, and active-audio states | Verified speaker-side data, not the PC's pairing list |
-| Connection control | Connect or disconnect an explicitly selected known device | Tested capability profile and confirmation by readback |
-| Private diagnostics | Preview and save an allowlisted report locally | Redaction and exact preview/export checks |
+The first available hands-on step is checking development source, not installing a product.
 
-The first research target is SoundLink Flex first generation, model 435910. It is a starting sample, not a restriction to one computer, Bluetooth adapter, or firmware version. Each model, firmware, and host combination needs its own evidence. Standard Bluetooth discovery alone does not establish speaker-side control support.
+Use the [source-and-test tutorial](docs/QUICKSTART.md#check-the-foundation-from-source) to prepare Git and Rust, check out the fixed foundation commit, and run its checks. This path needs no speaker and does not scan Bluetooth. Passing it does not establish hardware compatibility.
 
-Missing data must remain unknown. Unknown firmware stays read-only until evaluated; unsupported operations must not send commands. The initial scope excludes internal EQ, firmware flashing, arbitrary command injection, pairing-history deletion, physical button remapping, and full Bose app parity.
+## Technology and packages
 
-## Design and documentation
+A [Rust 2021 workspace](Cargo.toml) with four unpublished packages. [Cargo.lock](Cargo.lock) currently contains no third-party crates. No minimum supported Rust or Windows version has been selected.
 
-The library and Windows adapter come first, then the CLI, then the app. They share capability decisions, state, commands, and errors instead of maintaining separate control implementations.
+| Package | What it contains now |
+| --- | --- |
+| [speakerlink-core](crates/speakerlink-core/) | Model, command-input, error, and diagnostic contracts; no protocol codec or hardware control |
+| [speakerlink-windows](crates/speakerlink-windows/) | Discovery contract and an `Unsupported` sentinel; no real Windows adapter |
+| [speakerlink-cli](crates/speakerlink-cli/) | Library placeholder; no executable commands |
+| [speakerlink-app](crates/speakerlink-app/) | Library placeholder; no GUI |
 
-- [Specification](docs/SPEC.md): feature acceptance, privacy, errors, and proposed interfaces.
-- [Architecture](docs/ARCHITECTURE.md): package responsibilities and transport boundaries.
-- [Development order](docs/DEVELOPMENT.md): staged work and exit gates.
-- [Test plan](docs/TEST_PLAN.md): fixture, hardware, and release verification.
+Windows API bindings and eframe/egui are [architecture candidates](docs/ARCHITECTURE.md), not integrated dependencies. The future library, CLI, and app will share one capability policy and control implementation.
 
-The CLI examples in the specification are proposals, not runnable commands. Ubuntu CI does not mean a Linux Bluetooth backend exists.
+## Compatibility and limits
+
+The first research sample is SoundLink Flex first generation, model 435910. There is no verified hardware profile, and the project is not restricted to one host, adapter vendor, or firmware. Model, firmware, Windows build, adapter/driver, and each feature need their own [evidence](docs/COMPATIBILITY.md).
+
+Missing data stays unknown. The PC's paired-device list cannot substitute for the speaker's own list, and standard service discovery does not establish private control support. Unknown firmware stays read-only until evaluated; unsupported operations must send no commands.
+
+The initial scope excludes internal EQ, firmware flashing, arbitrary command injection, pairing-history deletion, physical button remapping, and full Bose app parity.
+
+## Development order
+
+- **Now:** foundation contracts and synthetic CI are in `main`; Windows and hardware acceptance remain open.
+- **Next:** real Windows discovery and reviewed hardware evidence.
+- **Later:** the four core capabilities, then CLI, app, and release acceptance.
+
+See the [development gates](docs/DEVELOPMENT.md), [specification](docs/SPEC.md), [architecture](docs/ARCHITECTURE.md), and [test plan](docs/TEST_PLAN.md). The specification's CLI examples remain proposals.
 
 ## Help and contributions
 
-Read [CONTRIBUTING](CONTRIBUTING.md) before changing behavior. Use [GitHub issues](https://github.com/skydreamer0/speaker-link/issues) for questions, documentation gaps, and sanitized bug or compatibility reports. Include the tested commit and what actually passed, failed, or was not tested.
+Read [CONTRIBUTING](CONTRIBUTING.md) before changing behavior. Use [GitHub issues](https://github.com/skydreamer0/speaker-link/issues) for questions and sanitized reports, including the tested commit and passed, failed, or not-tested outcomes.
 
-Keep MAC addresses, serials, private device names, local paths, raw captures, and full logs out of public issues. See [troubleshooting](docs/TROUBLESHOOTING.md#report-a-problem-without-sharing-private-data) for a minimal report and [SECURITY](SECURITY.md) for sensitive disclosures.
+Do not publish MAC addresses, serials, private device names, local paths, raw captures, or full logs. Follow the [minimal report checklist](docs/TROUBLESHOOTING.md#report-a-problem-without-sharing-private-data) and [SECURITY](SECURITY.md) for sensitive disclosures.
 
-The project is local by design. No account, cloud service, or automatic diagnostic upload is planned. Sharing a report is your choice.
+The product is local by design: no account, cloud service, or automatic diagnostic upload is planned. Sharing a report is your choice. README badge images are served by GitHub and Shields.io; [badge notes](THIRD_PARTY_NOTICES.md#readme-badges) explain that separate web-page behavior.
 
 ## License and independence
 
 Original project code and documentation use the [MIT license](LICENSE). See [third-party policy](THIRD_PARTY_NOTICES.md) and [distribution cautions](docs/COMPLIANCE.md).
 
-This is an independent community project, unaffiliated with or endorsed by Bose Corporation or Bluetooth SIG. Product and company names identify compatibility targets; their owners retain their trademarks. No certification, official app equivalence, or unlocked internal EQ is claimed.
+This is an independent community project. It is not affiliated with, sponsored by, or endorsed by Bose Corporation or Bluetooth SIG. Product and company names identify compatibility targets; their owners retain their trademarks. No certification, official app equivalence, or unlocked internal EQ is claimed.

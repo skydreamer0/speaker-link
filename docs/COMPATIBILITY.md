@@ -20,7 +20,8 @@ These are evidence labels, not new runtime capability values. [SPEC](SPEC.md) re
 
 | Scope | Public evidence | Bluetooth/product status |
 | --- | --- | --- |
-| Current `main` foundation, `709bffe2` | [PR #7](https://github.com/skydreamer0/speaker-link/pull/7) merged on 2026-10-25; [merge commit](https://github.com/skydreamer0/speaker-link/commit/709bffe2718fbd07fb1544d83cf3e7d774630a99) | Unpublished contracts; CLI/app placeholders; no working Bluetooth adapter |
+| Foundation introduced by PR #7, `709bffe2` | [PR #7](https://github.com/skydreamer0/speaker-link/pull/7) merged on 2026-10-25; [merge commit](https://github.com/skydreamer0/speaker-link/commit/709bffe2718fbd07fb1544d83cf3e7d774630a99) | Unpublished contracts; CLI/app placeholders; no working Bluetooth adapter |
+| Documentation update merged in `c5baadf5` | [PR #8](https://github.com/skydreamer0/speaker-link/pull/8); [exact-commit main/push CI](https://github.com/skydreamer0/speaker-link/actions/runs/40174021328) passed on Ubuntu 24.04 and Windows Server 2022 | README and guide changes only; no new Bluetooth capability |
 | Historical documentation baseline, `2782c396` | Specification and project documents before the foundation merge | No Cargo workspace or executable at that historical commit |
 | Pinned foundation snapshot, `382294f4`, now included in `main` | [Exact-commit CI](https://github.com/skydreamer0/speaker-link/actions/runs/40165335679) passed on Ubuntu 24.04 and Windows Server 2022 | Synthetic checks only; this run does not certify the merge commit or later documentation changes |
 | Windows hardware | Real discovery and access evidence tracked in [issue #2](https://github.com/skydreamer0/speaker-link/issues/2) | No released host/adapter/driver profile |
