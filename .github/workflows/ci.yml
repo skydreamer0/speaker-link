@@ -43,6 +43,8 @@ jobs:
         run: cargo +stable test --offline --locked --workspace --features speakerlink-app/native-ui
       - name: Check native smoke control flow (not GUI acceptance)
         run: python -m unittest discover -s tests -p test_windows_input_smoke.py -v
+      - name: Check portable package preflight and archive behavior
+        run: python -m unittest discover -s tests -p test_windows_portable_package.py -v
       - name: Build device-free native preview
         if: runner.os == 'Windows'
         run: cargo +stable build --offline --locked -p speakerlink-app --features native-ui

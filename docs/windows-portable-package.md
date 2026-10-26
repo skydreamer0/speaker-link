@@ -193,6 +193,14 @@ execution. In addition to the legacy payload, staging requires:
   (`["native-ui"]`), `artifact_path`, `artifact_sha256`, `source_url`,
   `build_evidence_url`, and `build_command`.
 
+The pinned source hashes describe the LF bytes stored in that Git commit. A Windows
+checkout with `core.autocrlf=true` can contain CRLF bytes with different hashes.
+Stage the raw Git blob bytes, for example by writing Python's
+`subprocess.check_output(["git", "show", "<commit>:Cargo.lock"])` with
+`Path.write_bytes`. Avoid shell text redirection or text-mode reads that convert
+line endings. Do not replace the reviewed hashes with converted checkout hashes
+to make strict preflight pass.
+
 `artifact_path` must be `target/x86_64-pc-windows-msvc/release/speakerlink-app.exe`.
 `build_command` must be the locked release command in prerequisites above.
 `source_url` must be the exact GitHub tree URL ending in the 40-character source SHA.
@@ -238,4 +246,5 @@ from strict `PASS`. Neither output grants release approval or marks local GPU te
   notices are generated, no fonts or third-party code are redistributed in this slice.
 
 The original 42c6106d source-only packager and ZIP remain unchanged. This is a separate
-three-file extension plus source inventory/evidence, not a new App renderer or installer.
+packager extension with regression tests, CI coverage, and source inventory/evidence,
+not a new App renderer or installer.

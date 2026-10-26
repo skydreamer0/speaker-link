@@ -1,4 +1,5 @@
 """Synthetic files only: these tests never build or run a Windows executable."""
+import errno
 import importlib.util
 import json
 import struct
@@ -157,14 +158,20 @@ class PackageTests(unittest.TestCase):
                 self.save()
                 self.assertBlocked("unsafe|notice must|reserved")
 
-    def test_symlink_and_unlisted_files_block(self):
+    def test_unlisted_file_blocks(self):
         extra = self.root / "private-trace.txt"
         extra.write_text("must never be packaged")
         self.assertBlocked("unexpected payload")
-        extra.unlink()
+
+    def test_symlink_blocks_when_supported(self):
         notice = self.root / "notices/test.txt"
         notice.unlink()
-        notice.symlink_to(self.root / "LICENSE")
+        try:
+            notice.symlink_to(self.root / "LICENSE")
+        except OSError as error:
+            if error.errno in {errno.EACCES, errno.EPERM} or getattr(error, "winerror", None) in {1, 50, 1314}:
+                self.skipTest(f"OS does not permit or support symlink creation: {error}")
+            raise
         self.assertBlocked("symlink rejected")
 
     def test_existing_output_never_overwritten(self):
@@ -196,7 +203,7 @@ class PackageTests(unittest.TestCase):
     def test_case_colliding_parent_directories_rejected(self):
         for directory, filename in (("A", "one.txt"), ("a", "two.txt")):
             folder = self.root / "notices" / directory
-            folder.mkdir()
+            folder.mkdir(exist_ok=True)
             (folder / filename).write_text("notice")
         for component, path in zip(self.inventory["components"], ("notices/A/one.txt", "notices/a/two.txt")):
             component["notices"] = [{"path": path, "sha256": P.digest(b"notice")}]
