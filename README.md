@@ -39,16 +39,16 @@ Use the [source-and-test tutorial](docs/QUICKSTART.md#check-the-foundation-from-
 
 ## Technology and packages
 
-A [Rust 2021 workspace](Cargo.toml) with four unpublished packages. [Cargo.lock](Cargo.lock) pins the [15-package Windows dependency closure](docs/DEPENDENCIES.md). No minimum supported Rust or Windows version has been selected.
+A [Rust 2021 workspace](Cargo.toml) with four unpublished packages. [Cargo.lock](Cargo.lock) pins the [Windows adapter](docs/DEPENDENCIES.md) and [App preview](docs/APP_DEPENDENCIES.md) dependencies. The preview requires Rust 1.95 or newer; a supported Windows product/runtime version has not been accepted.
 
 | Package | What it contains now |
 | --- | --- |
 | [speakerlink-core](crates/speakerlink-core/) | Model, command-input, error, and diagnostic contracts; no protocol codec or hardware control |
 | [speakerlink-windows](crates/speakerlink-windows/) | Experimental WinRT read-only service adapter with bounded waiting; explicit `Unsupported` sentinel remains available |
 | [speakerlink-cli](crates/speakerlink-cli/) | Library placeholder; no executable commands |
-| [speakerlink-app](crates/speakerlink-app/) | Library placeholder; no GUI |
+| [speakerlink-app](crates/speakerlink-app/) | Device-free native UI preview; no adapter operations |
 
-Microsoft Windows API bindings are integrated only for the read-only adapter. eframe/egui remains an [architecture candidate](docs/ARCHITECTURE.md), not an integrated dependency. The future library, CLI, and app will share one capability policy and control implementation.
+Microsoft Windows API bindings are integrated only for the read-only adapter. eframe/egui 0.37.0 is integrated for the [device-free App preview](docs/APP_PREVIEW.md), which renders shared core snapshots without linking the Windows adapter. Real library/CLI/App control parity remains unverified.
 
 ## Compatibility and limits
 
@@ -60,9 +60,10 @@ The initial scope excludes internal EQ, firmware flashing, arbitrary command inj
 
 ## Development order
 
-- **Now:** foundation contracts, experimental read-only service discovery, and synthetic checks; no complete CLI or app.
-- **Next:** close the remaining hardware, denied/unavailable, and observable lifecycle gates without treating successful requery as proof of OS cleanup.
-- **Later:** the four core capabilities, then CLI, app, and release acceptance.
+- **Now:** foundation contracts, experimental read-only service discovery, create-only diagnostic saving, and synthetic checks.
+- **Parallel preview:** device-free App entry and shared snapshot UI; no hardware control.
+- **Next:** close hardware, denied/unavailable, and observable lifecycle gates without treating successful requery as proof of OS cleanup.
+- **Later:** the four core capabilities, CLI/App parity, and release acceptance.
 
 See the [development gates](docs/DEVELOPMENT.md), [specification](docs/SPEC.md), [architecture](docs/ARCHITECTURE.md), and [test plan](docs/TEST_PLAN.md). The specification's CLI examples remain proposals.
 
@@ -79,3 +80,7 @@ The product is local by design: no account, cloud service, or automatic diagnost
 Original project code and documentation use the [MIT license](LICENSE). See [third-party policy](THIRD_PARTY_NOTICES.md) and [distribution cautions](docs/COMPLIANCE.md).
 
 This is an independent community project. It is not affiliated with, sponsored by, or endorsed by Bose Corporation or Bluetooth SIG. Product and company names identify compatibility targets; their owners retain their trademarks. No certification, official app equivalence, or unlocked internal EQ is claimed.
+
+### Device-free App UI preview
+
+The [App entry/UI preview](docs/APP_PREVIEW.md) uses clearly labeled synthetic snapshots, with empty, unknown, stale, unsupported and busy states. It does not scan, connect or operate a speaker; device and export controls are disabled. P2/P3 and F1–F4 acceptance remain open.

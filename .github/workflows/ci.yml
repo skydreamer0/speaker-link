@@ -31,13 +31,22 @@ jobs:
           rustup run stable rustc --version --verbose
           rustup run stable cargo --version
           rustup component list --installed --toolchain stable
+      - name: Fetch pinned registry dependencies
+        run: cargo +stable fetch --locked
       - name: Formatting
         run: cargo +stable fmt --all -- --check
-      - name: Fetch locked dependencies from crates.io
-        run: cargo +stable fetch --locked
       - name: Lint all targets
-        run: cargo +stable clippy --offline --locked --workspace --all-targets -- -D warnings
+        run: cargo +stable clippy --offline --locked --workspace --all-targets --features speakerlink-app/native-ui -- -D warnings
       - name: Compile all targets
-        run: cargo +stable check --offline --locked --workspace --all-targets
+        run: cargo +stable check --offline --locked --workspace --all-targets --features speakerlink-app/native-ui
       - name: Synthetic contracts only (no hardware tests exist)
-        run: cargo +stable test --offline --locked --workspace
+        run: cargo +stable test --offline --locked --workspace --features speakerlink-app/native-ui
+      - name: Check native smoke control flow (not GUI acceptance)
+        run: python -m unittest discover -s tests -p test_windows_input_smoke.py -v
+      - name: Build device-free native preview
+        if: runner.os == 'Windows'
+        run: cargo +stable build --offline --locked -p speakerlink-app --features native-ui
+      - name: Native default WGPU pointer and message-pump smoke (not render acceptance)
+        if: runner.os == 'Windows'
+        timeout-minutes: 2
+        run: python tools/windows_input_smoke.py target/debug/speakerlink-app.exe

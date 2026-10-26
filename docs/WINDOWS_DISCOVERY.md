@@ -1,6 +1,6 @@
 # Experimental Windows read-only service adapter
 
-This is a developer library component for issue #2, not a ready-to-run scanner. There is no discovery executable, CLI command, device picker or app yet. Tests never open a Bluetooth device. A first verification machine is a sample, not a product restriction: the adapter does not match a CPU, Bluetooth vendor, device identifier, Bose model or firmware version.
+This is a developer library component for issue #2, not a ready-to-run scanner. There is no discovery-host executable, discovery CLI command or device picker yet. The separate device-free App preview does not call this adapter. Tests never open a Bluetooth device. A first verification machine is a sample, not a product restriction: the adapter does not match a CPU, Bluetooth vendor, device identifier, Bose model or firmware version.
 
 ## Layers and entry point
 
@@ -36,7 +36,7 @@ Minimum remaining #2 evidence requires an explicitly authorized Windows host/dev
 
 This integration uses `discovery-from-pr7.patch` from the fixed [0.3.0 handoff](https://github.com/skydreamer0/speaker-link/tree/bb61d45d170c15f38964eb284018ef322c01946d/handoff/0.3.0), whose ZIP SHA-256 is `ba399da63c6871be9fa847b0419f11eca76dd661dc23fbe986aa9b049a1616a9`. All 65 manifest entries were checked. Product Rust files match source commit `5293fe849f857517f9d23e990595c40c48519d14` after line-ending normalization, including its existing WakeTimer race correction. The smaller `fix-from-ce9dfb6.patch` is an alternative for the older discovery candidate, not a second patch to apply here.
 
-The integration base is `08aa7464b44ba080491678e303d7bfa4cce4c3d8`, after foundation PR #7 and documentation PR #9. Updated status/dependency paragraphs preserve the newer bilingual README, badges, tutorials, compatibility history, and distribution cautions. The four-feature SPEC, CLI/app placeholders, and no-write boundaries are unchanged. The private selection hosts in the handoff are not installed as a product CLI or included in this workspace.
+The integration base is `08aa7464b44ba080491678e303d7bfa4cce4c3d8`, after foundation PR #7 and documentation PR #9. Updated status/dependency paragraphs preserve the newer bilingual README, badges, tutorials, compatibility history, and distribution cautions. At that PR #10 integration point, the CLI/app remained placeholders. The later device-free App preview is independent of this adapter; the four-feature SPEC and no-write boundaries remain unchanged. The private selection hosts in the handoff are not installed as a product CLI or included in this workspace.
 
 The handoff reports earlier Windows compilation and 32 workspace synthetic tests, plus separate host tests. Its earlier limited Flex read-only run found one standard `0x111E` service for each cache mode, not a private Bose control endpoint. Firmware 3.0.1 was user-reported, not read by the API. The 0.3.0 lifecycle run observed Pending followed by actual Future-owner drop, and a separate first-poll Ready Timeout; each was followed by a successful one-service requery. These are historical results for the handoff source, not fresh tests of this integration commit.
 

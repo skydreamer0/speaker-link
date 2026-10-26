@@ -1,6 +1,8 @@
 # Verification plan
 
-Document version 0.2.0. Planned tests below have not run.
+Document version 0.2.0. The table below defines full acceptance; passing a bounded test slice does not complete a row.
+
+Foundation, runtime, diagnostic-save and App view-model/headless UI synthetic checks have run on their recorded candidates. The integrated device-free workspace has 52 passing Linux synthetic tests plus Windows MSVC cross-checks; these are not native Windows window or hardware execution. Current-head CI must be recorded separately. Native UI, F1–F4 hardware, ownership/parity and release acceptance remain open. See [foundation evidence](FOUNDATION.md), [Windows limits](WINDOWS_DISCOVERY.md) and [App preview](APP_PREVIEW.md).
 
 | Check | Method | Passing evidence |
 | --- | --- | --- |
